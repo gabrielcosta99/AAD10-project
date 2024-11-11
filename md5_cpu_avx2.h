@@ -1,6 +1,4 @@
 //
-// Tomás Oliveira e Silva,  October 2024
-//
 // Arquiteturas de Alto Desempenho 2024/2025
 //
 // MD5 hash CPU code using AVX2 instructions (Intel/AMD)
