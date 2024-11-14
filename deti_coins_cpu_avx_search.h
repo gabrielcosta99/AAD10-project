@@ -10,7 +10,7 @@
 static void deti_coins_cpu_avx_search(u32_t n_random_words)
 {
   // u32_t n,idx,coin[13u],hash[4u];
-  u32_t n,indexes[4u];
+  u32_t n,idx;
   u64_t n_attempts,n_coins;
   u08_t *bytes;
 
@@ -18,7 +18,6 @@ static void deti_coins_cpu_avx_search(u32_t n_random_words)
   static u32_t hash_array[ 4u * 4u] __attribute__((aligned(16)));
 
   for(int i = 0; i < 4u; i++) {
-    u32_t idx = indexes[i];
     bytes = (u08_t *)&coins_array[13u*i];
     //
     // mandatory for a DETI coin
@@ -56,12 +55,12 @@ static void deti_coins_cpu_avx_search(u32_t n_random_words)
     for(int lane = 0; lane<4u; lane++){
       u32_t hash[4u]; //= hash_array[4u*i];
       u32_t coin[13u]; //= coins_array[13u*i];
+      bytes = (u08_t *)&coins_array[13u*lane];
       for(int i = 0u;i < 13u;i++)                                      // for each message number
         coin[i] = coins_array[13u*lane+i];
       for(int i = 0u; i<4u; i++)
         hash[i] = hash_array[4u*lane+i];
       
-      u32_t idx = indexes[lane];
       //
       // byte-reverse each word (that's how the MD5 message digest is printed...)
       //
