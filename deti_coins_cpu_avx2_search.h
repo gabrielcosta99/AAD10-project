@@ -66,7 +66,13 @@ static void deti_coins_cpu_avx2_search(u32_t n_random_words)
       // byte-reverse each word (that's how the MD5 message digest is printed...)
       //
       hash_byte_reverse(hash);
-      //
+
+      // u32_t target_hash[4u]; //= hash_array[4u*i];
+      // md5_cpu(coin,target_hash);
+      // hash_byte_reverse(target_hash);
+      // printf("hash:%d,target_hash:%d\n",*hash,*target_hash);
+
+
       // count the number of trailing zeros of the MD5 hash
       //
       n = deti_coin_power(hash);
