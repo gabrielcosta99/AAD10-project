@@ -1,5 +1,0 @@
-searching for 120 seconds using deti_coins_cpu_avx_search()
-coin: DETI coin                                          
-
-coin: DETI coin bla, bla, bla
-
