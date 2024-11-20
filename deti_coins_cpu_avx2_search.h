@@ -1,7 +1,7 @@
 //
 // Arquiteturas de Alto Desempenho 2024/2025
 //
-// deti_coins_avx_search() --- find DETI coins using md5_cpu_avx()
+// deti_coins_avx2_search() --- find DETI coins using md5_cpu_avx2()
 //
 
 #ifndef DETI_COINS_CPU_AVX2_SEARCH
@@ -9,38 +9,30 @@
 
 static void deti_coins_cpu_avx2_search(u32_t n_random_words)
 {
-  // u32_t n,idx,coin[13u],hash[4u];
-  u32_t n,idx;
+  int nLanes = 8;
+  u32_t n,idx,i,lane,v1,v2;
   u64_t n_attempts,n_coins;
-  u08_t *bytes;
+  u32_t coins_array[13* nLanes] __attribute__((aligned(32)));
+  u32_t hash_array[ 4u * nLanes] __attribute__((aligned(32)));
 
-  u32_t coins_array[13u * 8u] __attribute__((aligned(32)));
-  u32_t hash_array[ 4u * 8u] __attribute__((aligned(32)));
-
-  for(int i = 0; i < 8u; i++) {
-    bytes = (u08_t *)&coins_array[13u*i];
+  idx = 6;
+  for( lane = 0; lane < nLanes; lane++) {
     //
     // mandatory for a DETI coin
+    // 
+    coins_array[0u*nLanes+lane] = 0x49544544; //  "DETI"
+    coins_array[1u*nLanes+lane] = 0x696f6320; //  " coi"
+    coins_array[2u*nLanes+lane] = 0x2020206E; //  "n   "
+    coins_array[12u*nLanes+lane] = 0x0A202020; // "   \n"
+
     //
-    bytes[0u] = 'D';
-    bytes[1u] = 'E';
-    bytes[2u] = 'T';
-    bytes[3u] = 'I';
-    bytes[4u] = ' ';
-    bytes[5u] = 'c';
-    bytes[6u] = 'o';
-    bytes[7u] = 'i';
-    bytes[8u] = 'n';
-    bytes[9u] = ' ';
+    // prepare 8 combination (byte range: 0x20..0x7E) for the coins 
     //
-    // arbitrary, but printable utf-8 data terminated with a '\n' is hightly desirable
-    //
-    for(idx = 10u;idx < 13u * 4u - 1u;idx++)
-      bytes[idx] = ' ';
-    //
-    // mandatory termination
-    //
-    bytes[13u * 4u -  1u] = '\n';
+    for(i = 3u;i < 12u;i++)
+      coins_array[i*nLanes+lane] = 0x20202020;
+
+    coins_array[idx*nLanes+lane] = coins_array[idx*nLanes+lane] + lane; //add something different according to the lane
+
   }
 
   //
@@ -52,46 +44,41 @@ static void deti_coins_cpu_avx2_search(u32_t n_random_words)
     // compute MD5 hash
     //
     md5_cpu_avx2((v8si *)coins_array,(v8si *)hash_array);
-    
-    for(int lane = 0; lane<8u; lane++){
-      u32_t hash[4u]; //= hash_array[4u*i];
-      u32_t coin[13u]; //= coins_array[13u*i];
-      bytes = (u08_t *)&coins_array[13u*lane];
-      for(int i = 0u;i < 13u;i++)                                      // for each message number
-        coin[i] = coins_array[13u*lane+i];
-      for(int i = 0u; i<4u; i++)
-        hash[i] = hash_array[4u*lane+i];
-      
+    for(lane = 0; lane<nLanes; lane++){
+      v1 = coins_array[idx*nLanes+lane];
+      v2 = coins_array[(idx+1)*nLanes+lane];
+      u32_t hash[4u]; 
+      coin_t coin;
+      for(i = 0u;i < 13u;i++)                                      // for each message number
+        coin.coin_as_ints[i] = coins_array[i*nLanes+lane];
+      for(i = 0u; i<4u; i++)
+        hash[i] = hash_array[i*nLanes+lane];
       //
       // byte-reverse each word (that's how the MD5 message digest is printed...)
       //
       hash_byte_reverse(hash);
-
-      // u32_t target_hash[4u]; //= hash_array[4u*i];
-      // md5_cpu(coin,target_hash);
-      // hash_byte_reverse(target_hash);
-      // printf("hash:%d,target_hash:%d\n",*hash,*target_hash);
-
-
+      //
       // count the number of trailing zeros of the MD5 hash
       //
       n = deti_coin_power(hash);
       //
       // if the number of trailing zeros is >= 32 we have a DETI coin
       //
-      // printf("lane: %d, n: %d\n",lane,n);
       if(n >= 32u)
       {
-        save_deti_coin(coin);
+        save_deti_coin(coin.coin_as_ints);
         n_coins++;
       }
       //
       // try next combination (byte range: 0x20..0x7E)
-      //
-      for(idx = 10u;idx < 13u * 4u - 1u && bytes[idx] == (u08_t)126;idx++)
-        bytes[idx] = ' ';
-      if(idx < 13u * 4u - 1u)
-        bytes[idx]++;
+      
+      v1 = next_value_to_try_ascii(v1+nLanes-1);
+      if(v1 == 0x20202020){
+        v2 = next_value_to_try_ascii(v2);
+        v1 +=lane;
+      }
+      coins_array[idx*nLanes + lane] = v1;
+      coins_array[(idx+1)*nLanes + lane] = v2;
     }
   }
   STORE_DETI_COINS();

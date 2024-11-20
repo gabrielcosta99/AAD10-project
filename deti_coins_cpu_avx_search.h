@@ -9,41 +9,21 @@
 
 #define N_LANES 4
 
-typedef union{
-  u32_t coin_as_ints[13]; // 13 4-byte integers
-  char coin_as_chars[52]; // 52 = 13*4 bytes
-}coin_t;
 
 
 static void deti_coins_cpu_avx_search(u32_t n_random_words)
 {
-  coin_t coin;
-  // if(snprintf(coin.coin_as_chars,52,"DETI coin bla, bla, bla\n") != 52){
-  //   fprintf(stderr,"not exactly 52 bytes...\n");
-  //   exit(0);
-  // }
-  // for(int idx = 0; idx< 13; idx++){
-
-  // }
-
-  // u32_t n,idx,coin[13u],hash[4u];
   u32_t n,idx,i,lane,v1,v2;
   u64_t n_attempts,n_coins;
-  u08_t *bytes;
   int flag=0;
   static u32_t coins_array[13* N_LANES] __attribute__((aligned(16)));
   static u32_t hash_array[ 4u * N_LANES] __attribute__((aligned(16)));
 
   idx = 6;
   for( lane = 0; lane < N_LANES; lane++) {
-    // bytes = (u08_t *)&coins_array[lane*4];
     //
     // mandatory for a DETI coin
     // //
-    // coins_array[0u][lane] = 0x49544544; //  "DETI"
-    // coins_array[1u][lane] = 0x696f6320; //  " coi"
-    // coins_array[2u][lane] = 0x2020206E; //  "n   "
-    // coins_array[12u][lane] = 0x0A202020; // "   \n"
 
     coins_array[0u*N_LANES+lane] = 0x49544544; //  "DETI"
     coins_array[1u*N_LANES+lane] = 0x696f6320; //  " coi"
@@ -97,9 +77,7 @@ static void deti_coins_cpu_avx_search(u32_t n_random_words)
       v2 = coins_array[(idx+1)*N_LANES+lane];
       u32_t hash[4u]; //= hash_array[4u*i];
       coin_t coin; //= coins_array[13u*i];
-      // bytes = (u08_t *)&coins_array[13u*lane];
       for(i = 0u;i < 13u;i++)                                      // for each message number
-        // coin[i] = coins_array[13u*lane+i];
         coin.coin_as_ints[i] = coins_array[i*N_LANES+lane];
       for(i = 0u; i<4u; i++)
         hash[i] = hash_array[i*N_LANES+lane];
@@ -151,28 +129,6 @@ static void deti_coins_cpu_avx_search(u32_t n_random_words)
       //
       // try next combination (byte range: 0x20..0x7E)
       // //
-      //FINISH THIS
-
-      // for(idx = 10u;idx < 13u * 4u - 1u && coin.coin_as_chars[idx] == (u08_t)126;idx++)
-      //   coin.coin_as_chars[idx] = ' ';
-      // if(idx < 13u * 4u - 1u)
-      //   coin.coin_as_chars[idx] +=4;   // add 4 because we have 4 lanes
-    
-
-
-      // coins_array[2u*N_LANES+lane] = coins_array[2u*N_LANES+lane] | 0x00002020;     // leave the first bytes "n " in their place
-      // for(idx = 3u;idx < 12u;idx++)
-      //   coins_array[i*N_LANES+lane] = 0x20202020;
-      // if(idx < 13u * 4u - 1u){
-
-      //   coins_array[i*N_LANES+lane] = 0x30202020 + 0x010000*lane;
-      // }
-
-      
-      // for(idx = 10u;idx < 13u * 4u - 1u && bytes[idx] == (u08_t)126;idx++)
-      //   bytes[idx] = ' ';
-      // if(idx < 13u * 4u - 1u)
-      //   bytes[idx] +=4;   // add 4 because we have 4 lanes
       // u32_t prevV1 =v1;
       v1 = next_value_to_try_ascii(v1+N_LANES-1);
       if(v1 == 0x20202020){

@@ -1,3 +1,8 @@
+typedef union{
+  u32_t coin_as_ints[13]; // 13 4-byte integers
+  char coin_as_chars[52]; // 52 = 13*4 bytes
+}coin_t;
+
 u32_t next_value_to_try_ascii(u32_t v){
     v=v+1;
     if((v & 0x000000FF) < 0x0000007F) return v;
