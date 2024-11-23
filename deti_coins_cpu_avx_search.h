@@ -15,7 +15,7 @@ static void deti_coins_cpu_avx_search(u32_t n_random_words)
 {
   u32_t n,idx,i,lane,v1,v2;
   u64_t n_attempts,n_coins;
-  int flag=0;
+  // int flag=0;
   static u32_t coins_array[13* N_LANES] __attribute__((aligned(16)));
   static u32_t hash_array[ 4u * N_LANES] __attribute__((aligned(16)));
 

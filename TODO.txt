@@ -1,0 +1,2 @@
+[] use the random words variable in avx and avx2
+

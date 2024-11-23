@@ -5,3 +5,27 @@ V00:DETI coin               '&5\W
 V00:DETI coin               !C3V%                      
 V05:DETI coin               *X6;?                      
 V00:DETI coin               '&5\W                      
+V00:DETI coin               !C3V%                      
+V05:DETI coin               *X6;?                      
+V00:DETI coin               '&5\W                      
+V01:DETI coin               328G7"                     
+V03:DETI coin               ?"Htj#                     
+V00:DETI coin               hU|ol#                     
+V00:DETI coin               )Gc1t#                     
+V01:DETI coin               >8?"}#                     
+V01:DETI coin               $MB*Y%                     
+V03:DETI coin               Bo'*^%                     
+V01:DETI coin               Me5Uj%                     
+V01:DETI coin               _$@lm%                     
+V00:DETI coin               `5;&r%                     
+V08:DETI coin               &k?8/&                     
+V00:DETI coin               N\% U&                     
+V00:DETI coin               SUC<$(                     
+V00:DETI coin               >I:9n(                     
+V02:DETI coin               @;hgy)                     
+V00:DETI coin               d.S.:+                     
+V00:DETI coin               EL9RL+                     
+V00:DETI coin               pfg8M-                     
+V00:DETI coin               j^45d-                     
+V00:DETI coin               .*^ry.                     
+V00:DETI coin               !]#qh/                     
