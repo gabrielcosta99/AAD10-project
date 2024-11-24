@@ -46,7 +46,7 @@ clean:
 # compile for Intel/AMD processors without CUDA
 #
 deti_coins_intel:	$(SRC) $(H_FILES)
-	cc -Wall -O2 -mavx2 -DUSE_CUDA=0 $(SRC) -o deti_coins_intel
+	cc -Wall -O2 -fopenmp -mavx2 -DUSE_CUDA=0 $(SRC) -o deti_coins_intel
 
 
 #
