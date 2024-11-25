@@ -51,7 +51,7 @@ static void deti_coins_cuda_search(u32_t n_random_words)
     cu_params[0] = &device_hash;
     cu_params[1] = &v1;
     cu_params[2] = &v2;
-    CU_CALL( cuLaunchKernel , (cu_kernel,n_messages / 128u,1u,1u,128u,1u,1u,0u,(CUstream)0,&cu_params[0],NULL) );
+    CU_CALL( cuLaunchKernel , (cu_kernel,(n_messages+127) / 128u,1u,1u,128u,1u,1u,0u,(CUstream)0,&cu_params[0],NULL) );
     // CU_CALL( cuMemcpyDtoH , ((void *)host_hash,device_hash,(size_t)n_messages * (size_t)4 * sizeof(u32_t)) );
     CU_CALL( cuStreamSynchronize , (0) );
 

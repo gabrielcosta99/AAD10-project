@@ -41,54 +41,57 @@ extern "C" __global__ __launch_bounds__(128,1) void deti_coins_cuda_kernel_searc
     //
     n = (u32_t)threadIdx.x + (u32_t)blockDim.x * (u32_t)blockIdx.x;
     // printf("thread_number: %d\n",n);
-    n2 = (n / 95) ;
-    n1 = n % 95;
-    v1+= (n2 << 8) + n1 ;
-    // printf("n:%d, n2:%d,n1:%d,v2:%X, v1:%X\n",n,n2,n1,v2,v1);
+    if(n <= 95*95){
+        // if(n >9000)
+        //     printf("n: %d\n",n);
+        n2 = (n / 95) ;
+        n1 = n % 95;
+        v1+= (n2 << 8) + n1 ;
+        // printf("n:%d, n2:%d,n1:%d,v2:%X, v1:%X\n",n,n2,n1,v2,v1);
 
-    coin[0u] = 0x49544544; //  "DETI"
-    coin[1u] = 0x696f6320; //  " coi"
-    coin[2u] = 0x2020206E; //  "n   "
-    coin[12u] = 0x0A202020; // "   \n"
-    for(int i = 3u;i < 12u;i++)
-        coin[i] = 0x20202020;
-    coin[6] = v1;
-    coin[7] = v2;
-    
-//
-// compute MD5 hash
-//
-# define C(c)         (c)
-# define ROTATE(x,n)  (((x) << (n)) | ((x) >> (32 - (n))))
-# define DATA(idx)    coin[idx]
-# define HASH(idx)    hash[idx]
-# define STATE(idx)   state[idx]
-# define X(idx)       x[idx]
-  CUSTOM_MD5_CODE();
-# undef C
-# undef ROTATE
-# undef DATA
-# undef HASH
-# undef STATE
-# undef X
+        coin[0u] = 0x49544544; //  "DETI"
+        coin[1u] = 0x696f6320; //  " coi"
+        coin[2u] = 0x2020206E; //  "n   "
+        coin[12u] = 0x0A202020; // "   \n"
+        for(int i = 3u;i < 12u;i++)
+            coin[i] = 0x20202020;
+        coin[6] = v1;
+        coin[7] = v2;
+        
+    //
+    // compute MD5 hash
+    //
+    # define C(c)         (c)
+    # define ROTATE(x,n)  (((x) << (n)) | ((x) >> (32 - (n))))
+    # define DATA(idx)    coin[idx]
+    # define HASH(idx)    hash[idx]
+    # define STATE(idx)   state[idx]
+    # define X(idx)       x[idx]
+    CUSTOM_MD5_CODE();
+    # undef C
+    # undef ROTATE
+    # undef DATA
+    # undef HASH
+    # undef STATE
+    # undef X
 
 
-    // idx = atomicAdd(deti_coins_storage_area,13);
-    // if(idx<=1000-13)
-    //     ...deti_coins_storage_area[idx] = coin[0]
-    if(hash[3u] == 0u)
-    {
-        idx = atomicAdd(deti_coins_storage_area,13);
-        if(idx<=1000-13){
-            for(int j= 0;j<13;j++){
-                deti_coins_storage_area[idx+j] = coin[j];
+        // idx = atomicAdd(deti_coins_storage_area,13);
+        // if(idx<=1000-13)
+        //     ...deti_coins_storage_area[idx] = coin[0]
+        if(hash[3u] == 0u)
+        {
+            idx = atomicAdd(deti_coins_storage_area,13);
+            if(idx<=1000-13){
+                for(int j= 0;j<13;j++){
+                    deti_coins_storage_area[idx+j] = coin[j];
+                }
+
             }
-
+            // printf("idx: %3d,v2:%X,v1:%X\n",idx,v2,v1); // this value should be 1,14,27,etc...
         }
-        // printf("idx: %3d,v2:%X,v1:%X\n",idx,v2,v1); // this value should be 1,14,27,etc...
+        // coin[6u] += 1u << 16; // next combination
     }
-    // coin[6u] += 1u << 16; // next combination
-
         
 }
 
