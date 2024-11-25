@@ -1,0 +1,58 @@
+\documentclass[a4paper,12pt]{article}
+
+% packages
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+
+
+% Fancy header/footer settings
+\pagestyle{fancy}
+\fancyfoot[C]{}
+\fancyfoot[R]{\thepage} % Right-align page number in the footer
+
+
+% Title information
+\title{AAD - Assignment 1}
+\author{107474-Joseane Pereira \\
+109050-Gabriel Costa \\
+Universidade de Aveiro, DETI}
+\date{\today}
+
+\begin{document}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.3\linewidth]{ua.pdf}
+    \label{fig:enter-label}
+\end{figure}
+\maketitle
+\newpage
+\tableofcontents
+\newpage
+
+\section{Introduction}
+\label{sec:introduction}
+% brief introduction to the problem and the solution proposed
+
+In this assignment we were tasked with implementing search functions for a cryptocurrency,
+\textbf{"deti coin"}, using many different search algorithms and type of instructions.
+
+This coin is  a file with exactly 52 bytes whose MD5 message-digest1, when printed in hexadecimal,
+ends with at least 8 hexadecimal zeros (i.e., its last 32 bits are all 0). The file contents must begin with
+”DETI coin ” (note the space at the end) and must end with a newline (’\textbackslash n’ in C). The other bytes may
+have arbitrary values, but it is strongly recommended that these other bytes encode utf-8 text. 
+
+\section{Method}
+\label{sec:method}
+
+\section{Results}
+\label{sec:results}
+
+\section{Discussion}
+\label{sec:discussion}
+
+\end{document}
+

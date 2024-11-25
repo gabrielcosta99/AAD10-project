@@ -86,3 +86,13 @@ V00:DETI coin               .*^ry.
 V00:DETI coin               !]#qh/                     
 V00:DETI coin               -yaP-0                     
 V00:DETI coin               21#RF1                     
+V00:DETI coin               !C3V%                      
+V00:DETI coin               !C3V%                      
+V00:DETI coin               !C3V%                      
+V00:DETI coin               !C3V%                      
+V00:DETI coin               !C3V%                      
+V00:DETI coin               !C3V%                      
+V00:DETI coin               !C3V%                      
+V00:DETI coin               !C3V%                      
+V00:DETI coin               !C3V%                      
+V00:DETI coin               !C3V%                      
