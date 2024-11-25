@@ -126,11 +126,11 @@ static void alarm_signal_handler(int dummy)
 {
   stop_request = 1;
 }
+#include "search_utilities.h"
 
 #include "deti_coins_cpu_search.h"
 #include "deti_coins_cpu_special_search.h"
 
-#include "search_utilities.h"
 #ifdef MD5_CPU_AVX
 # include "deti_coins_cpu_avx_search.h"
 #endif

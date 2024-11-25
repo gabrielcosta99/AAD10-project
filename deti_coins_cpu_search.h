@@ -68,7 +68,7 @@ static void deti_coins_cpu_search(void)
     //
     for(idx = 10u;idx < 13u * 4u - 1u && bytes[idx] == (u08_t)126;idx++)
       bytes[idx] = ' ';
-    printf("idx: %d\n",idx);
+    // printf("idx: %d\n",idx);
     if(idx < 13u * 4u - 1u)
       bytes[idx]++;
   }
