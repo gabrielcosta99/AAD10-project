@@ -19,7 +19,7 @@ static void deti_coins_cpu_avx2_parallel_search(u32_t n_random_words)
         u32_t coins_array[13 * nLanes] __attribute__((aligned(32)));
         u32_t hash_array[4 * nLanes] __attribute__((aligned(32)));
 
-        // Initialize coins_array for each thread
+        int thread_id = omp_get_thread_num(); // Get thread ID
         for (lane = 0; lane < nLanes; lane++) {
             coins_array[0u * nLanes + lane] = 0x49544544; // "DETI"
             coins_array[1u * nLanes + lane] = 0x696f6320; // " coi"
@@ -30,8 +30,10 @@ static void deti_coins_cpu_avx2_parallel_search(u32_t n_random_words)
                 coins_array[i * nLanes + lane] = 0x20202020;
             }
 
-            coins_array[idx * nLanes + lane] = coins_array[idx * nLanes + lane] + lane;
+            // Ensure unique initialization for each thread
+            coins_array[idx * nLanes + lane] = coins_array[idx * nLanes + lane] + lane + thread_id * 1000;
         }
+
 
         // Coin search loop
         while (stop_request == 0) {
@@ -60,11 +62,17 @@ static void deti_coins_cpu_avx2_parallel_search(u32_t n_random_words)
                 n = deti_coin_power(hash);
 
                 // Check if it's a DETI coin
+
+                
                 if (n >= 32u) {
+#                   pragma omp critical
+                    {
                     save_deti_coin(coin.coin_as_ints);
                     n_coins++;
-                }
 
+                    }
+                }
+                
                 // Update coin values
                 v1 = next_value_to_try_ascii(v1 + nLanes - 1);
                 if (v1 == 0x20202020) {
@@ -80,6 +88,8 @@ static void deti_coins_cpu_avx2_parallel_search(u32_t n_random_words)
         total_attempts += n_attempts;
         total_coins += n_coins;
     }
+
+
 
     // Store the results
     STORE_DETI_COINS();
