@@ -34,19 +34,20 @@ typedef unsigned int u32_t;
 
 extern "C" __global__ __launch_bounds__(128,1) void deti_coins_cuda_kernel_search(u32_t *deti_coins_storage_area, u32_t v1, u32_t v2)
 {
-    u32_t n,a,b,c,d,coin[13],hash[4],state[4],x[16], idx, n1,n2;
+    u32_t n,a,b,c,d,coin[13],hash[4],state[4],x[16], idx, n1,n2,n3;
 
     //
     // get the global thread number
     //
     n = (u32_t)threadIdx.x + (u32_t)blockDim.x * (u32_t)blockIdx.x;
     // printf("thread_number: %d\n",n);
-    if(n <= 95*95){
+    if(n <= 95*95*95){
         // if(n >9000)
         //     printf("n: %d\n",n);
-        n2 = (n / 95) ;
-        n1 = n % 95;
-        v1+= (n2 << 8) + n1 ;
+        n3 = n/(95*95);
+        n2 = n%(95*95) / 95 ;
+        n1 = n % (95);
+        v1+= (n3 << 16) +(n2 << 8) + n1 ;
         // printf("n:%d, n2:%d,n1:%d,v2:%X, v1:%X\n",n,n2,n1,v2,v1);
 
         coin[0u] = 0x49544544; //  "DETI"
@@ -82,7 +83,7 @@ extern "C" __global__ __launch_bounds__(128,1) void deti_coins_cuda_kernel_searc
         if(hash[3u] == 0u)
         {
             idx = atomicAdd(deti_coins_storage_area,13);
-            if(idx<=1000-13){
+            if(idx<=10000-13){
                 for(int j= 0;j<13;j++){
                     deti_coins_storage_area[idx+j] = coin[j];
                 }

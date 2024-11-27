@@ -9,16 +9,16 @@
 #ifndef DETI_COINS_CUDA_SEARCH
 #define DETI_COINS_CUDA_SEARCH
 
-static void deti_coins_cuda_search(u32_t n_random_words)
+static void deti_coins_cuda_search(void)
 {
-  initialize_cuda(0,"deti_coins_cuda_kernel_search.cubin","deti_coins_cuda_kernel_search",0,1000);
+  initialize_cuda(0,"deti_coins_cuda_kernel_search.cubin","deti_coins_cuda_kernel_search",0,10000);
 
   u32_t i,j,v1,v2;
   u64_t n_attempts,n_coins;
 
-  u32_t host_hash[1000];
+  u32_t host_hash[10000];
   host_hash[0] = 1;
-  u32_t n_messages = 95*95; // 95**2
+  u32_t n_messages = 95*95*95; // 95**2
 
   void *cu_params[3];
 
@@ -40,7 +40,7 @@ static void deti_coins_cuda_search(u32_t n_random_words)
   //
   // find DETI coins
   //
-  CU_CALL( cuMemcpyHtoD , (device_hash,(void *)host_hash, 1000 * sizeof(u32_t)) );
+  CU_CALL( cuMemcpyHtoD , (device_hash,(void *)host_hash, 10000 * sizeof(u32_t)) );
   v1 = 0x20202020;
   v2 = 0x20202020;
   for(n_attempts = n_coins = 0ul;stop_request == 0;n_attempts+=n_messages)
@@ -55,7 +55,7 @@ static void deti_coins_cuda_search(u32_t n_random_words)
     // CU_CALL( cuMemcpyDtoH , ((void *)host_hash,device_hash,(size_t)n_messages * (size_t)4 * sizeof(u32_t)) );
     CU_CALL( cuStreamSynchronize , (0) );
 
-    v1 += 0x00005E5E;
+    v1 += 0x005E5E5E;
     v1 = next_value_to_try_ascii(v1);
     if(v1 == 0x20202020){
       v2 = next_value_to_try_ascii(v2);
@@ -63,7 +63,7 @@ static void deti_coins_cuda_search(u32_t n_random_words)
     // printf("local_v1: %X\n",v1);
     
   }
-  CU_CALL( cuMemcpyDtoH , ((void *)host_hash,device_hash,1000 * sizeof(u32_t)) );
+  CU_CALL( cuMemcpyDtoH , ((void *)host_hash,device_hash,10000 * sizeof(u32_t)) );
   terminate_cuda();
   n_coins = (host_hash[0]-1)/13;
   printf("n_coins: %ld\n",n_coins);
