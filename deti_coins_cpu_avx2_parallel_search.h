@@ -24,14 +24,16 @@ static void deti_coins_cpu_avx2_parallel_search(u32_t n_random_words)
             coins_array[0u * nLanes + lane] = 0x49544544; // "DETI"
             coins_array[1u * nLanes + lane] = 0x696f6320; // " coi"
             coins_array[2u * nLanes + lane] = 0x2020206E; // "n   "
-            coins_array[12u * nLanes + lane] = 0x0A202020; // "   \n"
+            coins_array[12u * nLanes + lane] = 0x0A202020; //"  \n"
+
+            // put the id number of the thread in the coin array in the space after the "DETI coin  " string
+            coins_array[12u * nLanes + lane] += thread_id<<8; // "id \n"
 
             for (i = 3u; i < 12u; i++) {
                 coins_array[i * nLanes + lane] = 0x20202020;
             }
 
-            // Ensure unique initialization for each thread
-            coins_array[idx * nLanes + lane] = coins_array[idx * nLanes + lane] + lane + thread_id * 1000;
+            
         }
 
 
