@@ -11,7 +11,7 @@
 
 
 
-static void deti_coins_cpu_avx_search(u32_t n_random_words)
+static void deti_coins_cpu_avx_search()
 {
   u32_t n,idx,i,lane,v1,v2;
   u64_t n_attempts,n_coins;

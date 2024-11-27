@@ -3,7 +3,7 @@
 #ifndef DETI_COINS_CPU_AVX2_PARALLEL_SEARCH
 #define DETI_COINS_CPU_AVX2_PARALLEL_SEARCH
 
-static void deti_coins_cpu_avx2_parallel_search(u32_t n_random_words)
+static void deti_coins_cpu_avx2_parallel_search(void)
 {
     int nLanes = 8;
     u32_t idx = 6;

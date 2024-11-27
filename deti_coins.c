@@ -202,7 +202,7 @@ int main(int argc,char **argv)
       case '1':
         printf("searching for %u seconds using deti_coins_cpu_avx_search()\n",seconds);
         fflush(stdout);
-        deti_coins_cpu_avx_search(n_random_words);
+        deti_coins_cpu_avx_search();
         break;
 #endif
 
@@ -210,28 +210,28 @@ int main(int argc,char **argv)
       case '2':
         printf("searching for %u seconds using deti_coins_cpu_avx2_search()\n",seconds);
         fflush(stdout);
-        deti_coins_cpu_avx2_search(n_random_words);
+        deti_coins_cpu_avx2_search();
         break;
 #endif
 #ifdef DETI_COINS_CPU_AVX2_PARALLEL_SEARCH
       case '5':
         printf("searching for %u seconds using deti_coins_cpu_avx2_parallel_search()\n",seconds);
         fflush(stdout);
-        deti_coins_cpu_avx2_parallel_search(n_random_words);
+        deti_coins_cpu_avx2_parallel_search();
         break;
 #endif 
 #ifdef DETI_COINS_CPU_NEON_SEARCH
       case '3':
         printf("searching for %u seconds using deti_coins_cpu_neon_search()\n",seconds);
         fflush(stdout);
-        deti_coins_cpu_neon_search(n_random_words);
+        deti_coins_cpu_neon_search();
         break;
 #endif
 #ifdef DETI_COINS_CUDA_SEARCH
       case '4':
         printf("searching for %u seconds using deti_coins_cuda_search()\n",seconds);
         fflush(stdout);
-        deti_coins_cuda_search(n_random_words);
+        deti_coins_cuda_search();
         break;
 #endif
 #ifdef DETI_COINS_CPU_SPECIAL_SEARCH

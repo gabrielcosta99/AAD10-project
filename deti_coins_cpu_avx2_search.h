@@ -7,7 +7,7 @@
 #ifndef DETI_COINS_CPU_AVX2_SEARCH
 #define DETI_COINS_CPU_AVX2_SEARCH
 
-static void deti_coins_cpu_avx2_search(u32_t n_random_words)
+static void deti_coins_cpu_avx2_search(void)
 {
   int nLanes = 8;
   u32_t n,idx,i,lane,v1,v2;
