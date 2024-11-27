@@ -45,14 +45,78 @@ ends with at least 8 hexadecimal zeros (i.e., its last 32 bits are all 0). The f
 ”DETI coin ” (note the space at the end) and must end with a newline (’\textbackslash n’ in C). The other bytes may
 have arbitrary values, but it is strongly recommended that these other bytes encode utf-8 text. 
 
+Having this in mind, we implemented the following suggested search methods:
+\begin{itemize}
+    \item \textbf{AVX} - We used the AVX intrinsics to implement the search function.
+    \item \textbf{AVX2} - We used the AVX2 intrinsics to implement the search function.
+    %\item \textbf{AVX512} - We used the AVX512 intrinsics to implement the search function.
+    \item \textbf{OpenMP} - We used OpenMP to parallelize the AVX2 search function as is the fastest one.
+    \item \textbf{CUDA} - We used CUDA instructions to implement the search function.
+\end{itemize}
+
 \section{Method}
 \label{sec:method}
+% description of the methods used to solve the problem
+\subsection{AVX and AVX2}
+\label{subsec:avx}
+
+For AVX part of the code was already given to us, we just had to implement the search function. We used the AVX intrinsics to implement the search function. The AVX2 part was implemented by us, we used the AVX2 intrinsics to implement the search function.
+
+
+\subsection{OpenMP}
+\label{subsec:openmp}
+
+For OpenMP we used the AVX2 search function and parallelized it using OpenMP. We used the pragma \textbf{\#pragma omp parallel for} to parallelize the search function.
+
+\subsection{CUDA}
+\label{subsec:cuda}
+
+For CUDA we used the AVX2 search function and parallelized it using CUDA. We used the \textbf{cudaMalloc}, \textbf{cudaMemcpy}, \textbf{cudaFree} and \textbf{cudaMemcpyDeviceToHost} functions to allocate memory in the GPU, copy the data to the GPU, free the memory in the GPU and copy the data back to the CPU, respectively. We also used the \textbf{cudaMemcpyDeviceToDevice} function to copy the data from the CPU to the GPU.
+
 
 \section{Results}
 \label{sec:results}
 
-\section{Discussion}
+%table with the results of the experiments
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|c|c|}
+        \hline
+        \textbf{Method} & \textbf{Time (m)} & \textbf{N of attempts} & \textbf{coins found} \\
+        \hline
+        AVX & 2 & 1 & 1  \\
+        AVX2 & 2 & 1 & 1 \\
+        OpenMP & 2 & 1 & 1 \\
+        CUDA & 2 & 1 & 1  \\
+        \hline
+    \end{tabular}
+    \caption{Results of the experiments on processor/gpu A}
+    \label{tab:results}
+\end{table}
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|c|c|}
+        \hline
+        \textbf{Method} & \textbf{Time (m)} & \textbf{N of attempts} & \textbf{coins found} \\
+        \hline
+        AVX & 2 & 1 & 1  \\
+        AVX2 & 2 & 1 & 1 \\
+        OpenMP & 2 & 1 & 1 \\
+        CUDA & 2 & 1 & 1  \\
+        \hline
+    \end{tabular}
+    \caption{Results of the experiments on processor/gpu B}
+    \label{tab:results}
+\end{table}
+
+
+
+\section{Conclusions}
 \label{sec:discussion}
+
+CUDA\textgreater OpenMP\textgreater AVX2\textgreater AVX
+
 
 \end{document}
 

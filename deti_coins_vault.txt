@@ -275,3 +275,13 @@ V00:DETI coin               R"|:+m!
 V01:DETI coin               V'Ch/m!                    
 V01:DETI coin               W$ yLo!                    
 V02:DETI coin               6[m/No!                    
+
+V00:DETI coin               K75v#                    ! 
+V00:DETI coin               !C3V%                      
+V00:DETI coin               f wV&                    & 
+V00:DETI coin               SaPV&                    % 
+V01:DETI coin               bS'f7                    ' 
+V01:DETI coin               _vqz8                    # 
+V00:DETI coin               ~(`.=                    $ 
+V05:DETI coin               *X6;?                      
+V00:DETI coin               vV(#@                    & 
