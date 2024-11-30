@@ -1,2 +1,2 @@
 [] use the random words variable in avx and avx2
-
+[] check why you get a bad DETI coin format when u run for an hour (probably not enough space OR need a V3)

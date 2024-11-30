@@ -40,23 +40,7 @@ static void deti_coins_cpu_avx_search()
       coins_array[i*N_LANES+lane] = 0x20202020;
 
     coins_array[idx*N_LANES+lane] = coins_array[idx*N_LANES+lane] + lane; //add something different according to the lane
-    // coins_array[2u*N_LANES+lane] = coins_array[2u*N_LANES+lane] + 0x48000000+lane*0x01000000 ;
-
-    // for(idx = 10u;idx < 13u * 4u - 1u;idx++)
-    //   coin.coin_as_chars[idx] = ' ';
-    // if(lane!= 0){
-    //   coin.coin_as_chars[10] +=idx;   // add variety in the first 4 lanes
-    // }
-    
-
-    // for(i = 0u;i < 13u;i++)                                      // for each message number
-    //   coins_array[i*N_LANES+lane] = coin.coin_as_ints[i];
-    
-
-    //
-    // mandatory termination
-    //
-    // bytes[13u * 4u -  1u] = '\n';
+   
   }
 
   //
@@ -64,10 +48,7 @@ static void deti_coins_cpu_avx_search()
   //
   for(n_attempts = n_coins = 0ul;stop_request == 0;n_attempts+=4)
   {
-    // if(n_attempts == 10000){     // debug
-    //   exit(0);
-    // }
-    
+
     //
     // compute MD5 hash
     //
@@ -81,35 +62,6 @@ static void deti_coins_cpu_avx_search()
         coin.coin_as_ints[i] = coins_array[i*N_LANES+lane];
       for(i = 0u; i<4u; i++)
         hash[i] = hash_array[i*N_LANES+lane];
-
-      // printf("coin: %s\n",coin.coin_as_chars);
-      
-      // if(snprintf(coin.coin_as_chars,52,"DETI coin bla, bla, bla                           \n") != 52){
-      //   fprintf(stderr,"not exactly 52 bytes... %d \n",snprintf(coin.coin_as_chars,52,"DETI coin bla, bla, bla\n"));
-      //   printf("coin: %s\n",coin.coin_as_chars);
-
-      //   exit(0);
-      // }
-      
-      // for(int i = 0; i<13u;i++){
-      //   printf("%d, ",coin[i]);
-      // }
-      // printf("\n");
-      // printf("hash:   ");
-      // for(int i = 0; i<4u;i++){
-      //   printf("%d ",hash[i]);
-      // }
-      // printf("\n");
-
-      // printf("cpuHash: ");
-      // u32_t cpuHash[4u];
-      // md5_cpu(coin,cpuHash);
-      // hash_byte_reverse(cpuHash);
-      // for(int i = 0; i<4u;i++){
-      //   printf("%d ",cpuHash[i]);
-      // }
-      // printf("\n");
-
       //
       // byte-reverse each word (that's how the MD5 message digest is printed...)
       //
@@ -134,29 +86,18 @@ static void deti_coins_cpu_avx_search()
       if(v1 == 0x20202020){
         v2 = next_value_to_try_ascii(v2);
         v1 +=lane;
-        // printf("prevV1:%X\n",prevV1);
-        // printf("v1:%X\n",v1);        
-        // printf("v2:%X\n",v2);
-        // printf("%s\n",coin.coin_as_chars);
-        // flag=5;
+       
       }
-      // printf("v1: %X\n",v1);
-      // printf("v2: %X\n",v2);
+
       coins_array[idx*N_LANES + lane] = v1;
       coins_array[(idx+1)*N_LANES + lane] = v2;
-      // if(flag>0){
-      //   printf("v1:%X\n",v1);
-      //   // printf("v2:%X\n",v2);
-      //   flag -=1;
-      // }
+     
     }
    
     
     
     
   }
-  // printf("v1:%X\n",v1);
-  // printf("v2:%X\n",v2);
   STORE_DETI_COINS();
   printf("deti_coins_cpu_search: %lu DETI coin%s found in %lu attempt%s (expected %.2f coins)\n",n_coins,(n_coins == 1ul) ? "" : "s",n_attempts,(n_attempts == 1ul) ? "" : "s",(double)n_attempts / (double)(1ul << 32));
 }

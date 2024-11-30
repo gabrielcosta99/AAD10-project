@@ -187,8 +187,8 @@ int main(int argc,char **argv)
       fprintf(stderr,"main: bad number of seconds --- format [Nd][Nh][Nm][N[s]], where each N is a number and [] means whats inside it is optional\n");
       exit(1);
     }
-    if(seconds < 120u)
-      seconds = 120u; // at least 2 minutes
+    if(seconds < 60u)
+      seconds = 60u; // at least 2 minutes
     if(seconds > 7200u)
       seconds = 7200u; // at most 2 hours
     n_random_words = (argc > 3) ? (u32_t)atol(argv[3]) : 1u;

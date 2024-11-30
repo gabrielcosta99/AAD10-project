@@ -60,7 +60,11 @@ Having this in mind, we implemented the following suggested search methods:
 \subsection{AVX and AVX2}
 \label{subsec:avx}
 
-For AVX part of the code was already given to us, we just had to implement the search function. We used the AVX intrinsics to implement the search function. The AVX2 part was implemented by us, we used the AVX2 intrinsics to implement the search function.
+For the AVX implementation, part of the code was already provided to us, so our task was to only implement the search function. To achieve this, we initialized all lanes with the standard DETI coin format. To introduce variety, we modified a given integer of the coin (stored as \textbf{v1} in each lane) by adding the lane number.
+
+To maintain continuous variety across iterations, we increment the v1 value in each lane by the total number of lanes (4). To ensure these values remain within the ASCII range, we utilized the "next\_value\_to\_try\_ascii" function. If v1 overflows, we increment the next integer (v2) and reset v1 to its initial value.
+
+The AVX2 implementation required only minor adjustments to the AVX code, as it processes 8 lanes instead of 4.
 
 
 \subsection{OpenMP}
@@ -71,8 +75,11 @@ For OpenMP we used the AVX2 search function and parallelized it using OpenMP. We
 \subsection{CUDA}
 \label{subsec:cuda}
 
-For CUDA we used the AVX2 search function and parallelized it using CUDA. We used the \textbf{cudaMalloc}, \textbf{cudaMemcpy}, \textbf{cudaFree} and \textbf{cudaMemcpyDeviceToHost} functions to allocate memory in the GPU, copy the data to the GPU, free the memory in the GPU and copy the data back to the CPU, respectively. We also used the \textbf{cudaMemcpyDeviceToDevice} function to copy the data from the CPU to the GPU.
+For CUDA, we initialized the \textbf{hash\_size} with 0 since the hashes are not being stored. Instead, each thread calculates a hash, and if it meets the condition of ending with 8 hexadecimal zeros, the corresponding \textbf{coin} is saved in a shared list accessible by all threads. This shared list is defined in "deti\_coins\_cuda\_search.h" and has its first index set to 1, indicating the next available position. When a thread finds a valid coin, it uses \textbf{atomicAdd} to increment this index by 13 (which represents the size of the coin), updating the next available position in the list.
 
+To generate a coin, each thread initializes its own unique candidate coin using the "v1" and "v2" values passed to them in the parameters. The thread modifies a specific part of the coin by adding its thread number (n) to an integer in the coin, while ensuring the values remain within the ASCII range. Each thread generates and evaluates 95 potential coins before completing its execution.
+
+To ensure that the threads explore different coin possibilities in successive runs, 95 (or 0x5E in hexadecimal) is added to the "v1" value for each iteration. If it overflows, we add 1 to the v2 value. The "next\_value\_to\_try\_ascii" variable ensures that the values remain within the valid ASCII range.
 
 \section{Results}
 \label{sec:results}
@@ -82,15 +89,15 @@ For CUDA we used the AVX2 search function and parallelized it using CUDA. We use
     \centering
     \begin{tabular}{|c|c|c|c|}
         \hline
-        \textbf{Method} & \textbf{Time (m)} & \textbf{N of attempts} & \textbf{coins found} \\
+        \textbf{Method} & \textbf{Time (h)} & \textbf{N of attempts} & \textbf{coins found} \\
         \hline
-        AVX & 2 & 1 & 1  \\
-        AVX2 & 2 & 1 & 1 \\
-        OpenMP & 2 & 1 & 1 \\
-        CUDA & 2 & 1 & 1  \\
+        AVX & 1 & $9.07*10^{10}$ & 1  \\
+        AVX2 & 1 & $1.51*10^{11}$ & 1 \\
+        OpenMP(avx2) & 1 & $1.17*10^{12}$ & 1 \\
+        CUDA & 1 & $4.06*10^{13}$ & 1  \\
         \hline
     \end{tabular}
-    \caption{Results of the experiments on processor/gpu A}
+    \caption{Results of the experiments on processor/gpu NVIDIA GeForce RTX 2060}
     \label{tab:results}
 \end{table}
 
@@ -115,7 +122,14 @@ For CUDA we used the AVX2 search function and parallelized it using CUDA. We use
 \section{Conclusions}
 \label{sec:discussion}
 
-CUDA\textgreater OpenMP\textgreater AVX2\textgreater AVX
+% CUDA\textgreater OpenMP\textgreater AVX2\textgreater AVX
+In this assignment, we explored various parallel computing methods to implement a search function for generating valid DETI coins. Each method leveraged different technologies, ranging from vectorization with AVX/AVX2 to multithreading with OpenMP and GPU programming with CUDA. The performance of these methods varied significantly, reflecting the strengths and limitations of the underlying architectures.
+
+From our results, CUDA demonstrated the highest efficiency, significantly outperforming the other approaches in terms of the number of attempts per unit time. This is attributed to the massive parallelism provided by GPU threads, which is ideal for the highly parallel nature of this search problem. OpenMP, when combined with AVX2, also delivered notable performance improvements over standalone AVX2 by utilizing multithreading on the CPU. Lastly, AVX and AVX2 provided a solid baseline, with AVX2 benefiting from the increased lane count for processing data.
+
+The key takeaway is that leveraging hardware-specific optimizations can yield dramatic improvements in computational efficiency. CUDA, with its specialized GPU capabilities, is the best choice for this problem, especially when scalability and performance are the primary objectives. OpenMP provides a strong alternative for systems where GPU resources are unavailable.
+
+Overall, this assignment reinforced the importance of understanding and effectively utilizing the strengths of different parallel computing frameworks. Each method showcased unique advantages that can be leveraged based on specific hardware and performance requirements.
 
 
 \end{document}
