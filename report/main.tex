@@ -6,6 +6,7 @@
 \usepackage{graphicx}
 \usepackage{fancyhdr}
 \usepackage{hyperref}
+\usepackage{float} 
 
 
 % Fancy header/footer settings
@@ -70,7 +71,14 @@ The AVX2 implementation required only minor adjustments to the AVX code, as it p
 \subsection{OpenMP}
 \label{subsec:openmp}
 
-For OpenMP we used the AVX2 search function and parallelized it using OpenMP. We used the pragma \textbf{\#pragma omp parallel for} to parallelize the search function.
+For OpenMP we used the AVX2 search function and parallelized it using OpenMP.
+We used the pragma \textbf{\#pragma omp parallel for} to parallelize the 
+search function.
+Similiar to the AVX2 implementation, we initialized all lanes with the standard
+DETI coin format. To introduce variety, we modified a given integer of the coin
+(stored as \textbf{v1} in each lane) by adding the thread number,
+ and at the end all the numbers of the attempts as well as the coins found are summed giving the result complete result.
+This way we ensure that each thread will explore different possibilities of coins.
 
 \subsection{CUDA}
 \label{subsec:cuda}
@@ -84,8 +92,14 @@ To ensure that the threads explore different coin possibilities in successive ru
 \section{Results}
 \label{sec:results}
 
+After implementing the search functions, we conducted experiments to evaluate the performance
+of each method. We measured the time taken to find a valid DETI coin, the number of attempts
+made, and the number of coins found. The experiments were conducted on two different systems:
+one with a AMD Ryzen 5 4600H and NVIDIA GeForce RTX 2060 and another with a intel core i7-11370H and a NVIDIA GeForce RTX 
+3060.
+
 %table with the results of the experiments
-\begin{table}[h]
+\begin{table}[H]
     \centering
     \begin{tabular}{|c|c|c|c|}
         \hline
@@ -98,23 +112,23 @@ To ensure that the threads explore different coin possibilities in successive ru
         \hline
     \end{tabular}
     \caption{Results of the experiments on processor/gpu NVIDIA GeForce RTX 2060}
-    \label{tab:results}
+    \label{tab:results1}
 \end{table}
 
-\begin{table}[h]
+\begin{table}[H]
     \centering
     \begin{tabular}{|c|c|c|c|}
         \hline
-        \textbf{Method} & \textbf{Time (m)} & \textbf{N of attempts} & \textbf{coins found} \\
+        \textbf{Method} & \textbf{Time (h)} & \textbf{N of attempts} & \textbf{coins found} \\
         \hline
-        AVX & 2 & 1 & 1  \\
-        AVX2 & 2 & 1 & 1 \\
-        OpenMP & 2 & 1 & 1 \\
-        CUDA & 2 & 1 & 1  \\
+        AVX & 1 & $9.57*10^{10}$ & 2  \\
+        AVX2 & 1 &  $1.50*10^{11}$ & 3 \\
+        OpenMP(avx2) & 1 & $7.93*10^{11}$ & 9 \\
+        CUDA & 1 & 1 & 1  \\
         \hline
     \end{tabular}
-    \caption{Results of the experiments on processor/gpu B}
-    \label{tab:results}
+    \caption{Results of the experiments on a intel core i7-11370H and a NVIDIA GeForce RTX 3060}
+    \label{tab:results2}
 \end{table}
 
 
