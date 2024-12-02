@@ -60,8 +60,6 @@ extern "C" __global__ __launch_bounds__(128,1) void deti_coins_cuda_kernel_searc
         coin[6] = v1;
         coin[7] = v2;
         for(int i = 0; i<95; i++){
-
-            
 //
 // compute MD5 hash
 //
@@ -86,7 +84,7 @@ CUSTOM_MD5_CODE();
             if(hash[3u] == 0u)
             {
                 idx = atomicAdd(deti_coins_storage_area,13);
-                if(idx<=10000-13){
+                if(idx<=15000*13-13){
                     for(int j= 0;j<13;j++){
                         deti_coins_storage_area[idx+j] = coin[j];
                     }
