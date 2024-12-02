@@ -1,6 +1,0 @@
-cuda     ->    156392059000 attempts in 2min
-cuda new ->   1354794824250 attempts in 2min
-avx      ->      3022858928 attempts in 2min
-avx2     ->      5041175792 attempts in 2min
-omp      ->     38866737376 attempts in 2min
-

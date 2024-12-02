@@ -29,19 +29,19 @@ static void deti_coins_cpu_special_search(void)
   coin.coin_as_chars[7u] = 'i';
   coin.coin_as_chars[8u] = 'n';
   coin.coin_as_chars[9u] = ' ';
-  coin.coin_as_chars[10u] = 'a';
-  coin.coin_as_chars[11u] = ' ';
-  coin.coin_as_chars[12u] = 't';
-  coin.coin_as_chars[13u] = 'u';
-  coin.coin_as_chars[14u] = 'a';
+  coin.coin_as_chars[10u] = 'l';
+  coin.coin_as_chars[11u] = 'o';
+  coin.coin_as_chars[12u] = 'r';
+  coin.coin_as_chars[13u] = 'e';
+  coin.coin_as_chars[14u] = 'm';
   coin.coin_as_chars[15u] = ' ';
-  coin.coin_as_chars[16u] = 'm';
-  coin.coin_as_chars[17u] = 'a';
-  coin.coin_as_chars[18u] = 'e';
-  coin.coin_as_chars[19u] = ':';
-  coin.coin_as_chars[20u] = ' ';
-  // coin.coin_as_chars[21u] = ' ';
-  // coin.coin_as_chars[22u] = ' ';
+  coin.coin_as_chars[16u] = 'i';
+  coin.coin_as_chars[17u] = 'p';
+  coin.coin_as_chars[18u] = 's';
+  coin.coin_as_chars[19u] = 'u';
+  coin.coin_as_chars[20u] = 'm';
+  coin.coin_as_chars[21u] = ':';
+  coin.coin_as_chars[22u] = ' ';
   // coin.coin_as_chars[23u] = 'n';
   // coin.coin_as_chars[24u] = 'o';
   // coin.coin_as_chars[25u] = ':';
@@ -52,7 +52,7 @@ static void deti_coins_cpu_special_search(void)
   //
   // arbitrary, but printable utf-8 data terminated with a '\n' is hightly desirable
   //
-  for(idx = 21u;idx < 13u * 4u - 1u;idx++)
+  for(idx = 23u;idx < 13u * 4u - 1u;idx++)
     coin.coin_as_chars[idx] = '0';
   //
   // mandatory termination
@@ -86,10 +86,10 @@ static void deti_coins_cpu_special_search(void)
     //
     // try next combination (byte range: 0x20..0x7E)
     //
-    for(idx = 13u * 4u - 2u; idx > 21u && coin.coin_as_chars[idx] == '9';idx--)
+    for(idx = 13u * 4u - 2u; idx > 23u && coin.coin_as_chars[idx] == '9';idx--)
       coin.coin_as_chars[idx] = '0';
     // printf("idx: %d\n",idx);
-    if(idx > 21u)
+    if(idx > 23u)
       coin.coin_as_chars[idx]++;
     // printf("coin: %s, idx:%d\n",coin.coin_as_chars,idx);
   }
