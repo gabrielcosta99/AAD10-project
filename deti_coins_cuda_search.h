@@ -9,14 +9,16 @@
 #ifndef DETI_COINS_CUDA_SEARCH
 #define DETI_COINS_CUDA_SEARCH
 
+#define DATA_SIZE 15000*13
+
 static void deti_coins_cuda_search(void)
 {
-  initialize_cuda(0,"deti_coins_cuda_kernel_search.cubin","deti_coins_cuda_kernel_search",15000*13,0);
+  initialize_cuda(0,"deti_coins_cuda_kernel_search.cubin","deti_coins_cuda_kernel_search",DATA_SIZE,0);
 
   u32_t i,j,v1,v2;
   u64_t n_attempts,n_coins;
 
-  u32_t host_data[15000*13];
+  u32_t host_data[DATA_SIZE];
   host_data[0] = 1;
   u32_t n_messages = 95*95*95; 
 
@@ -40,7 +42,7 @@ static void deti_coins_cuda_search(void)
   //
   // find DETI coins
   //
-  CU_CALL( cuMemcpyHtoD , (device_data,(void *)host_data, 15000*13 * sizeof(u32_t)) );
+  CU_CALL( cuMemcpyHtoD , (device_data,(void *)host_data, DATA_SIZE * sizeof(u32_t)) );
   v1 = 0x20202020;
   v2 = 0x20202020;
   for(n_attempts = n_coins = 0ul;stop_request == 0;n_attempts+=n_messages*95)
@@ -64,7 +66,7 @@ static void deti_coins_cuda_search(void)
     
   }
   
-  CU_CALL( cuMemcpyDtoH , ((void *)host_data,device_data,15000*13 * sizeof(u32_t)) );
+  CU_CALL( cuMemcpyDtoH , ((void *)host_data,device_data,DATA_SIZE * sizeof(u32_t)) );
   terminate_cuda();
   n_coins = (host_data[0]-1)/13;
   printf("n_coins: %ld\n",n_coins);
@@ -73,7 +75,7 @@ static void deti_coins_cuda_search(void)
     for(j = 0; j<13;j++){
       coin.coin_as_ints[j] = host_data[i*13+1+j];
     }
-    printf("%s\n",coin.coin_as_chars);
+    printf("i:%d coin: %s\n",i,coin.coin_as_chars);
     save_deti_coin(coin.coin_as_ints);
   }
   STORE_DETI_COINS();

@@ -265,28 +265,27 @@ int main(int argc,char **argv)
   fprintf(stderr,"usage: %s -t                               # MD5 hash tests\n",argv[0]);
   fprintf(stderr,"       %s -s0 [seconds] [ignored]          # search for DETI coins using md5_cpu()\n",argv[0]);
 #ifdef DETI_COINS_CPU_AVX_SEARCH
-  fprintf(stderr,"       %s -s1 [seconds] [n_random_words]   # search for DETI coins using md5_cpu_avx()\n",argv[0]);
+  fprintf(stderr,"       %s -s1 [seconds]   # search for DETI coins using md5_cpu_avx()\n",argv[0]);
 #endif
 #ifdef DETI_COINS_CPU_AVX2_SEARCH
-  fprintf(stderr,"       %s -s2 [seconds] [n_random_words]   # search for DETI coins using md5_cpu_avx2()\n",argv[0]);
+  fprintf(stderr,"       %s -s2 [seconds]   # search for DETI coins using md5_cpu_avx2()\n",argv[0]);
 #endif
 #ifdef DETI_COINS_CPU_AVX2_PARALLEL_SEARCH
-  fprintf(stderr,"       %s -s5 [seconds] [n_random_words]   # search for DETI coins using md5_cpu_avx2_parallel()\n",argv[0]);
+  fprintf(stderr,"       %s -s5 [seconds]   # search for DETI coins using md5_cpu_avx2_parallel()\n",argv[0]);
 #endif
 #ifdef DETI_COINS_CPU_NEON_SEARCH
-  fprintf(stderr,"       %s -s3 [seconds] [n_random_words]   # search for DETI coins using md5_cpu_neon()\n",argv[0]);
+  fprintf(stderr,"       %s -s3 [seconds]   # search for DETI coins using md5_cpu_neon()\n",argv[0]);
 #endif
 #ifdef DETI_COINS_CPU_AVX512_SEARCH
-  fprintf(stderr,"       %s -s8 [seconds] [n_random_words]   # search for DETI coins using md5_cpu_avx512()\n",argv[0]);
+  fprintf(stderr,"       %s -s8 [seconds]   # search for DETI coins using md5_cpu_avx512()\n",argv[0]);
 #endif
 #ifdef DETI_COINS_CUDA_SEARCH
-  fprintf(stderr,"       %s -s4 [seconds] [n_random_words]   # search for DETI coins using CUDA\n",argv[0]);
+  fprintf(stderr,"       %s -s4 [seconds]   # search for DETI coins using CUDA\n",argv[0]);
 #endif
 
 #ifdef DETI_COINS_CPU_SPECIAL_SEARCH
   fprintf(stderr,"       %s -s9 [seconds] [ignored]          # special search for DETI coins using md5_cpu()\n",argv[0]);
 #endif
   fprintf(stderr,"                                           #   seconds is the amount of time spent in the search\n");
-  fprintf(stderr,"                                           #   n_random_words is the number of 4-byte words to use\n");
   return 1;
 }
