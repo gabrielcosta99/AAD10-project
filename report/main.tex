@@ -77,7 +77,7 @@ search function.
 Similiar to the AVX2 implementation, we initialized all lanes with the standard
 DETI coin format. To introduce variety, we modified a given integer of the coin
 (stored as \textbf{v1} in each lane) by adding the thread number,
- and at the end all the numbers of the attempts as well as the coins found are summed giving the result complete result.
+ and at the end all the numbers of the attempts as well as the coins found are summed giving the complete result.
 This way we ensure that each thread will explore different possibilities of coins.
 
 \subsection{CUDA}
