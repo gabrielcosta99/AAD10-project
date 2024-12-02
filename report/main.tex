@@ -54,6 +54,7 @@ Having this in mind, we implemented the following suggested search methods:
     \item \textbf{OpenMP} - We used OpenMP to parallelize the AVX2 search function as is the fastest one.
     \item \textbf{CUDA} - We used CUDA instructions to implement the search function.
     \item \textbf{special} - We searched for DETI coins with a format specified by us.
+    \item \textbf{Web Assembly} - We used Web Assembly to implement the search function.
 \end{itemize}
 
 \section{Method}
@@ -118,12 +119,12 @@ one with a AMD Ryzen 5 4600H and NVIDIA GeForce RTX 2060 and another with a inte
     \centering
     \begin{tabular}{|c|c|c|c|}
         \hline
-        \textbf{Method} & \textbf{Time (h)} & \textbf{N of attempts} & \textbf{coins found} \\
+        \textbf{Method} & \textbf{Time (h)} & \textbf{N of attempts}\\
         \hline
-        AVX & 1 & $9.07*10^{10}$ & 1  \\
-        AVX2 & 1 & $1.51*10^{11}$ & 1 \\
-        OpenMP(avx2) & 1 & $1.17*10^{12}$ & 1 \\
-        CUDA & 1 & $4.06*10^{13}$ & 1  \\
+        AVX & 1 & $9.07*10^{10}$   \\
+        AVX2 & 1 & $1.51*10^{11}$ \\
+        OpenMP(avx2) & 1 & $1.17*10^{12}$ \\
+        CUDA & 1 & $4.06*10^{13}$   \\
         \hline
     \end{tabular}
     \caption{Results of the experiments on a AMD Ryzen 5 4600H and NVIDIA GeForce RTX 2060}
@@ -134,18 +135,21 @@ one with a AMD Ryzen 5 4600H and NVIDIA GeForce RTX 2060 and another with a inte
     \centering
     \begin{tabular}{|c|c|c|c|}
         \hline
-        \textbf{Method} & \textbf{Time (h)} & \textbf{N of attempts} & \textbf{coins found} \\
+        \textbf{Method} & \textbf{Time (h)} & \textbf{N of attempts}  \\
         \hline
-        AVX & 1 & $9.57*10^{10}$ & 2  \\
-        AVX2 & 1 &  $1.50*10^{11}$ & 3 \\
-        OpenMP(avx2) & 1 & $7.93*10^{11}$ & 9 \\
-        CUDA & 1 & 1 & 1  \\
+        AVX & 1 & $9.57*10^{10}$   \\
+        AVX2 & 1 &  $1.50*10^{11}$ \\
+        OpenMP(avx2) & 1 & $7.93*10^{11}$  \\
+        CUDA & 1 & $3.89*10^{13}$  \\
         \hline
     \end{tabular}
     \caption{Results of the experiments on a intel core i7-11370H and a NVIDIA GeForce RTX 3060}
     \label{tab:results2}
 \end{table}
 
+For WebAssembly only one test was made nd the result was the following:
+
+\textbf{2 DETI coins found in 1000000000 attempts (expected 0.23 coins) in 60.086s}
 
 
 \section{Conclusions}
@@ -154,7 +158,7 @@ one with a AMD Ryzen 5 4600H and NVIDIA GeForce RTX 2060 and another with a inte
 % CUDA\textgreater OpenMP\textgreater AVX2\textgreater AVX
 In this assignment, we explored various parallel computing methods to implement a search function for generating valid DETI coins. Each method leveraged different technologies, ranging from vectorization with AVX/AVX2 to multithreading with OpenMP and GPU programming with CUDA. The performance of these methods varied significantly, reflecting the strengths and limitations of the underlying architectures.
 
-From our results, CUDA demonstrated the highest efficiency, significantly outperforming the other approaches in terms of the number of attempts per unit time. This is attributed to the massive parallelism provided by GPU threads, which is ideal for the highly parallel nature of this search problem. OpenMP, when combined with AVX2, also delivered notable performance improvements over standalone AVX2 by utilizing multithreading on the CPU. Lastly, AVX and AVX2 provided a solid baseline, with AVX2 benefiting from the increased lane count for processing data.
+From our results, CUDA demonstrated the highest efficiency, significantly outperforming the other approaches in terms of the number of attempts per unit time. This is attributed to the massive parallelism provided by GPU threads, which is ideal for the highly parallel nature of this search problem. OpenMP, when combined with AVX2, also delivered notable performance improvements over standalone AVX2 by utilizing multithreading on the CPU it delivered about double the performance in some cases. Lastly, AVX and AVX2 provided a solid baseline, with AVX2 benefiting from the increased lane count for processing data.
 
 The key takeaway is that leveraging hardware-specific optimizations can yield dramatic improvements in computational efficiency. CUDA, with its specialized GPU capabilities, is the best choice for this problem, especially when scalability and performance are the primary objectives. OpenMP provides a strong alternative for systems where GPU resources are unavailable.
 

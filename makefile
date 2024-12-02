@@ -40,8 +40,14 @@ clean:
 	rm -f deti_coins_intel
 	rm -f deti_coins_apple
 	rm -f deti_coins_intel_cuda md5_cuda_kernel.cubin deti_coins_cuda_kernel_search.cubin
+	rm -f deti_coins_wasm.html deti_coins_wasm.js deti_coins_wasm.wasm
 
 
+#
+# complie for webassembly
+#
+deti_coins_wasm: $(SRC) deti_coins_web_asembly_search.c
+	emcc -Wall -O2 deti_coins_web_asembly_search.c -o deti_coins_wasm.html
 #
 # compile for Intel/AMD processors without CUDA
 #
