@@ -41,7 +41,7 @@ Universidade de Aveiro, DETI}
 In this assignment we were tasked with implementing search functions for a cryptocurrency,
 \textbf{"deti coin"}, using many different search algorithms and type of instructions.
 
-This coin is  a file with exactly 52 bytes whose MD5 message-digest1, when printed in hexadecimal,
+This coin is  a file with exactly 52 bytes whose MD5 message-digest, when printed in hexadecimal,
 ends with at least 8 hexadecimal zeros (i.e., its last 32 bits are all 0). The file contents must begin with
 ”DETI coin ” (note the space at the end) and must end with a newline (’\textbackslash n’ in C). The other bytes may
 have arbitrary values, but it is strongly recommended that these other bytes encode utf-8 text. 
@@ -78,9 +78,9 @@ We used the pragma \textbf{\#pragma omp parallel for} to parallelize the
 search function.
 Similiar to the AVX2 implementation, we initialized all lanes with the standard
 DETI coin format. To introduce variety, we modified a given integer of the coin
-(stored as \textbf{v1} in each lane) by adding the thread number,
- and at the end all the numbers of the attempts as well as the coins found are summed giving the complete result.
-This way we ensure that each thread will explore different possibilities of coins.
+(stored as \textbf{v1} in each lane) by adding the thread number to the coin's last integer,
+ and at the end all the numbers of the attempts, as well as the coins found, are summed giving the complete result.
+This way we ensure that each thread will explore different possible coins.
 
 \subsection{CUDA}
 \label{subsec:cuda}
@@ -89,19 +89,27 @@ For CUDA, we initialized the \textbf{hash\_size} with 0 since the hashes are not
 
 To generate a coin, each thread initializes its own unique candidate coin using the "v1" and "v2" values passed to them in the parameters. The thread modifies a specific part of the coin by adding its thread number (n) to an integer in the coin, while ensuring the values remain within the ASCII range. Each thread generates and evaluates 95 potential coins before completing its execution.
 
-To ensure that the threads explore different coin possibilities in successive runs, 95 (or 0x5E in hexadecimal) is added to the "v1" value for each iteration. If it overflows, we add 1 to the v2 value. The "next\_value\_to\_try\_ascii" variable ensures that the values remain within the valid ASCII range.
+To ensure that the threads explore different coin possibilities in successive runs, 95 (or 0x5E in hexadecimal) is added to the "v1" value for each iteration. If it overflows, we add 1 to the v2 value. The "next\_value\_to\_try\_ascii" function ensures that the values remain within the valid ASCII range.
 
 \subsection{Web Assembly}
 \label{subsec:wasm}
 
-In WebAssembly, we started with the standard \textbf{deti\_coins\_cpu\_search}. We initialized the coin using the data from \textbf{deti\_coin\_example.txt}. Instead of directly using the \textbf{md5\_cpu()} function, we created a modified version, replacing \textbf{\#define DATA(idx) data[idx]} with \textbf{coin[idx]} to work with the coin that we initialized before.
+In WebAssembly, we started with the standard \textbf{deti\_coins\_cpu\_search}. 
+We initialized the coin using the data from \textbf{deti\_coin\_example.txt}. 
+Then, instead of directly using the \textbf{md5\_cpu()} function, we created a modified version, 
+replacing \textbf{\#define DATA(idx) data[idx]} with \textbf{coin[idx]} to work with the coin that we initialized before.
 
-To validate the coin, we checked if the resulting hash had its last 32 bits equal to 0 (i.e., \textbf{hash[3]==0}). Since the coin cannot be saved, we printed it upon success. To generate a new coin, we used the \textbf{next\_value\_to\_try} function to modify one of the integers in the coin, incrementing the next one if it overflowed.
+To validate the coin, we checked if the resulting hash had its last 32 bits equal to 0 (i.e., \textbf{hash[3]==0}). 
+Since the coin cannot be saved, we printed it upon success. 
+To generate a new coin, we used the \textbf{next\_value\_to\_try} function to modify one of the integers in the coin, 
+incrementing the next one if it overflowed.
 
 \subsection{special}
 \label{subsec:special}
 
-Here, we copied the code of "deti\_coins\_cpu\_search" and we changed the initialization to "DETI coin lorem ipsum: " and added 0s (instead of spaces) until we reached the 51 characters since the last character has to be a "\textbackslash n". Then we added "1" as if we were adding to a regular integer number and we eventualy found the following coin:
+Here, we copied the code of "deti\_coins\_cpu\_search" and we changed the initialization to "DETI coin lorem ipsum: ". 
+Then, we added 0s (instead of spaces) until we reached the 51 characters since the last character has to be a "\textbackslash n". 
+Lastly, we added "1" as if we were adding to a regular integer number and we eventualy found the following coin:
 
 \textbf{DETI coin lorem ipsum: 0000000000000000000925941103}
 
@@ -147,7 +155,7 @@ one with a AMD Ryzen 5 4600H and NVIDIA GeForce RTX 2060 and another with a inte
     \label{tab:results2}
 \end{table}
 
-For WebAssembly only one test was made nd the result was the following:
+For WebAssembly only one test was made and the result was the following:
 
 \textbf{2 DETI coins found in 1000000000 attempts (expected 0.23 coins) in 60.086s}
 
