@@ -53,6 +53,7 @@ Having this in mind, we implemented the following suggested search methods:
     %\item \textbf{AVX512} - We used the AVX512 intrinsics to implement the search function.
     \item \textbf{OpenMP} - We used OpenMP to parallelize the AVX2 search function as is the fastest one.
     \item \textbf{CUDA} - We used CUDA instructions to implement the search function.
+    \item \textbf{special} - We searched for DETI coins with a format specified by us.
 \end{itemize}
 
 \section{Method}
@@ -88,6 +89,20 @@ For CUDA, we initialized the \textbf{hash\_size} with 0 since the hashes are not
 To generate a coin, each thread initializes its own unique candidate coin using the "v1" and "v2" values passed to them in the parameters. The thread modifies a specific part of the coin by adding its thread number (n) to an integer in the coin, while ensuring the values remain within the ASCII range. Each thread generates and evaluates 95 potential coins before completing its execution.
 
 To ensure that the threads explore different coin possibilities in successive runs, 95 (or 0x5E in hexadecimal) is added to the "v1" value for each iteration. If it overflows, we add 1 to the v2 value. The "next\_value\_to\_try\_ascii" variable ensures that the values remain within the valid ASCII range.
+
+\subsection{Web Assembly}
+\label{subsec:wasm}
+
+In WebAssembly, we started with the standard \textbf{deti\_coins\_cpu\_search}. We initialized the coin using the data from \textbf{deti\_coin\_example.txt}. Instead of directly using the \textbf{md5\_cpu()} function, we created a modified version, replacing \textbf{\#define DATA(idx) data[idx]} with \textbf{coin[idx]} to work with the coin that we initialized before.
+
+To validate the coin, we checked if the resulting hash had its last 32 bits equal to 0 (i.e., \textbf{hash[3]==0}). Since the coin cannot be saved, we printed it upon success. To generate a new coin, we used the \textbf{next\_value\_to\_try} function to modify one of the integers in the coin, incrementing the next one if it overflowed.
+
+\subsection{special}
+\label{subsec:special}
+
+Here, we copied the code of "deti\_coins\_cpu\_search" and we changed the initialization to "DETI coin lorem ipsum: " and added 0s (instead of spaces) until we reached the 51 characters since the last character has to be a "\textbackslash n". Then we added "1" as if we were adding to a regular integer number and we eventualy found the following coin:
+
+\textbf{DETI coin lorem ipsum: 0000000000000000000925941103}
 
 \section{Results}
 \label{sec:results}
