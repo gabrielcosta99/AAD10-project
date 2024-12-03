@@ -1,9 +1,0 @@
-\contentsline {section}{\numberline {1}Introduction}{3}{section.1}%
-\contentsline {section}{\numberline {2}Method}{3}{section.2}%
-\contentsline {subsection}{\numberline {2.1}AVX and AVX2}{3}{subsection.2.1}%
-\contentsline {subsection}{\numberline {2.2}OpenMP}{4}{subsection.2.2}%
-\contentsline {subsection}{\numberline {2.3}CUDA}{4}{subsection.2.3}%
-\contentsline {subsection}{\numberline {2.4}Web Assembly}{4}{subsection.2.4}%
-\contentsline {subsection}{\numberline {2.5}special}{5}{subsection.2.5}%
-\contentsline {section}{\numberline {3}Results}{5}{section.3}%
-\contentsline {section}{\numberline {4}Conclusions}{6}{section.4}%
